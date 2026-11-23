@@ -1,0 +1,66 @@
+{
+  "name": "openclaw-plugin-knowledge-embeddings",
+  "version": "0.3.0",
+  "description": "Local, instruction-aware Harrier embeddings for OpenClaw memory search and Knowledge, through OpenClaw's managed llama.cpp provider.",
+  "type": "module",
+  "keywords": [
+    "openclaw",
+    "openclaw-plugin",
+    "embeddings",
+    "llama.cpp",
+    "gguf",
+    "memory-search",
+    "harrier"
+  ],
+  "author": "Peng Ying",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pengying/knowledge-embeddings.git"
+  },
+  "homepage": "https://github.com/pengying/knowledge-embeddings#readme",
+  "bugs": {
+    "url": "https://github.com/pengying/knowledge-embeddings/issues"
+  },
+  "files": [
+    "index.js",
+    "adapter.js",
+    "knowledge-vectors.js",
+    "knowledge-vectors-service.js",
+    "knowledge-vectors-watch.js",
+    "openclaw.plugin.json",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "docs"
+  ],
+  "engines": {
+    "node": ">=24.16.0 <25 || >=26.1.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.9.8",
+      "minGatewayVersion": "2026.9.8"
+    },
+    "build": {
+      "openclawVersion": "2026.11.5",
+      "pluginSdkVersion": "2026.11.5"
+    },
+    "install": {
+      "clawhubSpec": "clawhub:openclaw-plugin-knowledge-embeddings",
+      "npmSpec": "openclaw-plugin-knowledge-embeddings",
+      "defaultChoice": "clawhub",
+      "minHostVersion": ">=2026.9.8"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

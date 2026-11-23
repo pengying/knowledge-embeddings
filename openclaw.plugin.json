@@ -1,0 +1,80 @@
+{
+  "id": "knowledge-embeddings",
+  "name": "Knowledge Embeddings (Harrier)",
+  "description": "Local, instruction-aware Harrier embeddings for memory search and Knowledge, through OpenClaw's managed llama.cpp server.",
+  "legacyPluginIds": [
+    "harrier-local"
+  ],
+  "version": "0.3.0",
+  "activation": {
+    "onStartup": true
+  },
+  "requiresPlugins": [
+    "llama-cpp"
+  ],
+  "contracts": {
+    "embeddingProviders": [
+      "harrier-local"
+    ]
+  },
+  "backupResources": [
+    {
+      "disposition": "include",
+      "scope": "state",
+      "relativePath": "harrier-local"
+    }
+  ],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "warmUp": {
+        "type": "boolean",
+        "description": "Embed one query when the service starts, so the first search after a Gateway restart does not load the model. Default: on while Harrier is in use (memory.search.provider is harrier-local, or Knowledge vectors are on), otherwise off."
+      },
+      "knowledgeVectors": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Keep a vectors index of every Knowledge store and partition (read-only), in this plugin's state directory. Default: on when Knowledge holds the memory slot and its owner search names this plugin (plugins.entries.knowledge.config.ownerSearch.vectors.plugin: \"knowledge-embeddings\"), otherwise off."
+          },
+          "ownerSupplement": {
+            "type": "boolean",
+            "description": "Offer the index to Knowledge's knowledge_owner_search as ids and scores only; Knowledge validates every hit. Answers only while Knowledge holds the memory slot. Default: on when Knowledge's owner search names this plugin, otherwise off."
+          },
+          "intervalMs": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 86400000,
+            "description": "Safety poll after the pass at service start (while watching, it also rescans the watched directories); 0 turns the poll off. Default 300000 while watching, 30000 when watch is off or unavailable."
+          },
+          "watch": {
+            "type": "boolean",
+            "default": true,
+            "description": "Reindex when Knowledge's record files change (non-recursive fs.watch on each record directory, read-only; Git and SQLite churn ignored). Falls back to polling if watching fails."
+          },
+          "watchDebounceMs": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 600000,
+            "description": "Quiet time after the last change before a reindex. Default 2000."
+          },
+          "batchSize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 16,
+            "description": "Documents per embed batch; small batches keep queries from waiting behind indexing. Default 2."
+          },
+          "vectorFloor": {
+            "type": "number",
+            "minimum": -1,
+            "maximum": 1,
+            "description": "Lowest cosine proposed. Default 0.3."
+          }
+        }
+      }
+    }
+  }
+}
